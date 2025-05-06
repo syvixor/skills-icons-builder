@@ -50,7 +50,7 @@ const selectIcon = (icon: never) => {
     <div class="flex flex-col">
         <h1 class="text-3xl font-extrabold">Skills Icons - URL Builder</h1>
         <p class="text-base font-normal">
-            Click icons below to add them to your <b>URL</b>. Order reflects selection.
+            ★ Click icons below to add them to your <b>URL</b>. Order reflects selection.
         </p>
     </div>
     <div class="flex flex-col gap-2">
@@ -60,42 +60,39 @@ const selectIcon = (icon: never) => {
                 <UInput v-model="finalUrl" placeholder="Base URL" variant="soft" size="xl" class="w-full" disabled />
             </div>
             <div class="md:col-span-1 flex items-center gap-2">
-                <UTooltip text="Copy">
-                    <UButton icon="i-lucide-copy" variant="soft" size="xl" block @click="copyToClipboard"
-                        :disabled="selectedIcons.length === 0" />
-                </UTooltip>
-                <UTooltip text="Preview">
-                    <UButton :to="finalUrl" target="_blank" icon="i-lucide-external-link" variant="soft" size="xl" block
-                        :disabled="selectedIcons.length === 0" />
-                </UTooltip>
-                <UTooltip text="Clear">
-                    <UButton icon="i-lucide-x" variant="soft" size="xl" block @click="clearAll"
-                        :disabled="selectedIcons.length === 0" />
-                </UTooltip>
+                <UButton icon="i-lucide-copy" label="Copy" variant="soft" size="xl" block @click="copyToClipboard"
+                    :disabled="selectedIcons.length === 0" />
+                <UButton icon="i-lucide-x" label="Clear" variant="soft" size="xl" block @click="clearAll"
+                    :disabled="selectedIcons.length === 0" />
             </div>
         </div>
-        <!-- Info -->
-        <UCard variant="soft">
-            <div class="flex items-center gap-2" v-if="selectedIcons.length > 0">
-                <UButton :label="icon" variant="soft" @click="() => removeIcon(icon)" v-for="icon in selectedIcons"
-                    :key="icon" />
-            </div>
-            <UButton v-else label="No icons selected yet." color="neutral" variant="ghost" disabled />
-        </UCard>
+    </div>
+    <!-- Info -->
+    <div class="flex flex-col gap-2">
+        <div class="flex items-center gap-2">
+            <div class="bg-primary w-1 h-5" />
+            <h2 class="text-2xl font-extrabold">Selected Icons</h2>
+        </div>
+        <div class="grid grid-cols-6 md:grid-cols-16 lg:grid-cols-22 gap-2" v-if="selectedIcons.length > 0">
+            <img :src="`https://raw.githubusercontent.com/syvixor/skills-icons/refs/heads/main/icons/${icon}.svg`"
+                :alt="icon" v-for="(icon, index) in selectedIcons" :key="index" />
+        </div>
+        <p class="text-base font-medium" v-else>✗ There are no selected icons yet.</p>
     </div>
     <!-- Icons -->
     <div class="flex flex-col gap-2">
         <div class="flex items-center gap-2">
+            <div class="bg-primary w-1 h-5" />
             <h2 class="text-2xl font-extrabold">Available Icons</h2>
-            <UBadge :label="`${icons?.total} Icons`" variant="subtle" size="sm" />
         </div>
         <div class="grid grid-cols-5 md:grid-cols-12 lg:grid-cols-18 gap-3">
-            <UTooltip :text="icon" v-for="(icon, index) in icons?.icons" :key="index">
-                <img :src="`https://raw.githubusercontent.com/syvixor/skills-icons/refs/heads/main/icons/${icon}.svg`"
-                    :alt="icon" class="transition-transform hover:scale-90 hover:cursor-pointer"
-                    @click="() => selectIcon(icon as never)"
-                    :class="[
-                        selectedIcons.includes(icon as never) ? 'bg-neutral-800 ring ring-neutral-700 rounded-lg p-1.5' : '']" />
+            <UTooltip :text="icon" v-for="(icon, index) in icons" :key="index">
+                <div class="group rounded-lg overflow-visible" :class="[selectedIcons.includes(icon as never)
+                    ? 'bg-neutral-800 p-1' : '']">
+                    <img :src="`https://raw.githubusercontent.com/syvixor/skills-icons/refs/heads/main/icons/${icon}.svg`"
+                        :alt="icon" class="transition-transform group-hover:scale-95 group-hover:cursor-pointer"
+                        @click="() => selectIcon(icon as never)" />
+                </div>
             </UTooltip>
         </div>
     </div>
