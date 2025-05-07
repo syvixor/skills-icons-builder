@@ -28,7 +28,7 @@ const removeIcon = (icon: string) => {
     });
 }
 
-const clearAll = () => {
+const clearAll = async () => {
     selectedIcons.value = [];
     toast.add({
         title: "Icons Cleared",
@@ -73,11 +73,12 @@ const selectIcon = (icon: never) => {
             <div class="bg-primary w-1 h-5" />
             <h2 class="text-2xl font-extrabold">Selected Icons</h2>
         </div>
-        <div class="grid grid-cols-6 md:grid-cols-16 lg:grid-cols-22 gap-2" v-if="selectedIcons.length > 0">
+        <TransitionGroup name="transition" tag="div" class="grid grid-cols-6 md:grid-cols-16 lg:grid-cols-22 gap-2"
+            v-show="selectedIcons.length > 0">
             <img :src="`https://raw.githubusercontent.com/syvixor/skills-icons/refs/heads/main/icons/${icon}.svg`"
-                :alt="icon" v-for="(icon, index) in selectedIcons" :key="index" />
-        </div>
-        <p class="text-base font-medium" v-else>✗ There are no selected icons yet.</p>
+                    :alt="icon" v-for="icon in selectedIcons" :key="icon"  />
+        </TransitionGroup>
+        <p class="text-base font-medium" v-show="selectedIcons.length < 1">✗ There are no selected icons yet.</p>
     </div>
     <!-- Icons -->
     <div class="flex flex-col gap-2">
@@ -98,3 +99,22 @@ const selectIcon = (icon: never) => {
     </div>
     <USeparator icon="i-lucide-party-popper" />
 </template>
+
+<style scoped>
+.transition-enter-from,
+.transition-leave-to {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.transition-enter-active,
+.transition-leave-active {
+    transition: all 0.3s ease;
+}
+
+.transition-leave-from,
+.transition-enter-to {
+    opacity: 1;
+    transform: translateY(0);
+}
+</style>
